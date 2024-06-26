@@ -1,0 +1,167 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: url('/static/pink-aesthetic-3480x2160-16812.jpg') center/cover no-repeat;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px);
+    z-index: -1;
+}
+
+.todo-wrapper {
+    width: 400px;
+    padding: 30px;
+    background: rgba(151, 49, 138, 0.3);
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    color: #ffffff;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    animation: slideIn 0.5s ease forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+h1 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #200303;
+}
+
+.todo-container {
+    margin-top: 20px;
+    max-height: 250px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #764ba29c transparent;
+}
+
+.task {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.623);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
+    position: relative;
+}
+
+.task:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 80%;
+    background: #764ba2;
+    border-radius: 4px;
+}
+
+.task:hover {
+    background: rgba(255, 255, 255, 0.582);
+    transform: translateY(-2px);
+}
+
+.task input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.task input[type="checkbox"]:checked {
+    border-color: #764ba2;
+    background: #764ba2;
+}
+
+.task span {
+    flex-grow: 1;
+    font-size: 16px;
+    color: #140101;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.task span:hover {
+    text-decoration: underline;
+}
+
+.completed span {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.button-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#task-input {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 70%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+button {
+    margin-top: 20px;
+    padding: 12px 20px;
+    margin-left: 10px;
+    background: #0c1f72;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    outline: none;
+}
+
+button:hover {
+    background: #764ba2;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #764ba2;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #5a3e95;
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="/static/index.css">
+</head>
+<body>
+    <div class="todo-wrapper">
+        <h1>To-Do List</h1>
+        <div class="todo-container" id="todo-container">
+            <!-- To-Do list will be displayed here -->
+        </div>
+        <div class="button-container">
+            <input type="text" id="task-input" placeholder="Add a new task...">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to add a new task
+        function addTask() {
+            var taskContent = document.getElementById("task-input").value;
+            if (taskContent.trim() === "") {
+                alert("Please enter a task.");
+                return;
+            }
+
+            // Send task content to Flask server
+            fetch('/add_task', {
+                method: 'POST',
+                body: JSON.stringify({task_content: taskContent}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // If task added successfully, update the to-do list
+                    var todoContainer = document.getElementById("todo-container");
+                    var taskElement = document.createElement("div");
+                    taskElement.className = "task";
+                    taskElement.innerHTML = `
+                        <input type="checkbox" onchange="completeTask(this)">
+                        <span>${taskContent}</span>
+                        <button onclick="deleteTask('${taskContent}')">Delete</button>
+                    `;
+                    todoContainer.appendChild(taskElement);
+                    // Clear the task input field
+                    document.getElementById("task-input").value = "";
+                } else {
+                    alert("Failed to add task. Please try again.");
+                }
+            });
+        }
+
+        // Function to mark a task as completed
+        function completeTask(checkbox) {
+            var taskContent = checkbox.nextElementSibling.textContent;
+            // Send task content to Flask server
+            fetch('/complete_task', {
+                method: 'POST',
+                body: JSON.stringify({task_content: taskContent}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    checkbox.parentNode.classList.toggle('completed');
+                } else {
+                    alert("Failed to mark task as completed. Please try again.");
+                }
+            });
+        }
+
+        // Function to delete a task
+        function deleteTask(taskContent) {
+            // Send task content to Flask server for deletion
+            fetch('/delete_task', {
+                method: 'POST',
+                body: JSON.stringify({task_content: taskContent}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Find and remove the task from the UI
+                    var taskElements = document.getElementsByClassName('task');
+                    for (var i = 0; i < taskElements.length; i++) {
+                        if (taskElements[i].querySelector('span').textContent === taskContent) {
+                            taskElements[i].remove();
+                            break;
+                        }
+                    }
+                } else {
+                    alert("Failed to delete task. Please try again.");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
